@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     fileInput.addEventListener('change', function(e) {
         if (this.files.length > 0) {
-            fileName.textContent = this.files[0].name;
+            const file = this.files[0];
+            fileName.textContent = file.name;
             fileInfo.style.display = 'flex';
+            // Add confirmation message in chat
+            addMessage('system', `The file "${file.name}" has been uploaded and is ready for queries.`);
         }
     });
 
@@ -16,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.value = '';
         fileInfo.style.display = 'none';
         fileName.textContent = '';
+        // Add message when file is removed
+        addMessage('system', 'The SQL file has been removed.');
     });
 
     // Chat functionality
