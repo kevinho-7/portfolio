@@ -11,6 +11,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
    </head>
     <body>
       <div class="container-fluid">
@@ -21,23 +22,88 @@
                 <img src="images/logo_gensql.png" alt="GenSQL Logo" class="logo img-fluid">
               </div>
               <div class="col-12 col-md-8 text-md-end text-center mt-3 mt-md-0">
-                <button class="btn btn-primary me-3">How does it work?</button>
-                <select class="form-select d-inline-block w-auto">
-                  <option value="en">English</option>
-                  <option value="es">Español</option>
-                  <option value="pt">Português</option>
-                </select>
+                <div class="header-controls">
+                  <button class="btn btn-primary">How does it work?</button>
+                  <select class="form-select">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </header>
         <main>
-          
+          <div class="container mt-5">
+            <!-- Chat Interface -->
+            <div class="row justify-content-center">
+              <div class="col-12 col-lg-8">
+                <!-- Chat Messages Area -->
+                <div class="chat-container">
+                  <div class="messages" id="messagesContainer">
+                    <!-- Messages will be inserted here by JavaScript -->
+                    <div class="message system">
+                      <div class="message-content">
+                        Welcome to GenSQL! Upload your SQL file and I'll help you generate queries.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-container">
+                  <div class="input-group">
+                    <div class="textarea-wrapper">
+                      <div class="file-info" style="display: none;">
+                        <span class="file-name"></span>
+                        <span class="remove-file" title="Remove file">×</span>
+                      </div>
+                      <textarea 
+                        class="form-control" 
+                        id="userInput" 
+                        rows="3" 
+                        placeholder="Describe the SQL query you want to generate..."
+                      ></textarea>
+                      <div class="action-buttons">
+                        <label for="sqlFile" class="btn upload-button" title="Upload SQL File">
+                          <img src="images/icons-svg/upload.svg" alt="Upload" class="action-icon">
+                          <input type="file" id="sqlFile" accept=".sql" hidden>
+                        </label>
+                        <button class="btn send-button" id="sendButton" title="Send Message">
+                          <img src="images/icons-svg/send.svg" alt="Send" class="action-icon">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <small class="text-muted mt-2">Press Enter to send, Shift + Enter for new line</small>
+                </div>
+              </div>
+            </div>
+          </div>
         </main>
+        <script src="scripts/main.js"></script>
         <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <footer>
-
+            <div class="container">
+                <div class="footer-content">
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/kevin-garcia-ferreira-2933b8212/" target="_blank" title="LinkedIn">
+                            <img src="images/icons-svg/linkedin.svg" alt="LinkedIn" class="social-icon">
+                        </a>
+                        <a href="https://instagram.com/your-profile" target="_blank" title="Instagram">
+                            <img src="images/icons-svg/instagram.svg" alt="Instagram" class="social-icon">
+                        </a>
+                        <a href="https://github.com/your-profile" target="_blank" title="GitHub">
+                            <img src="images/icons-svg/github.svg" alt="GitHub" class="social-icon">
+                        </a>
+                    </div>
+                    <div class="copyright">
+                        © 2024 GenSQL. All rights reserved.
+                    </div>
+                </div>
+            </div>
         </footer>
-    </div>
+    </div>  
     </body>
 </html>
