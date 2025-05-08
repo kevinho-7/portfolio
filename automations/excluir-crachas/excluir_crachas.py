@@ -59,30 +59,33 @@ with sync_playwright() as p:
             pag.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         
         # pega as datas de cadastro dos crachas nos perfis dos funcionarios
-            pag.wait_for_selector("small.text-muted", timeout=10000)
-            datas = pag.locator("small.text-muted").all_inner_texts()
+            if pag.locator("small.text-muted").count() == 0:
+                 continue
+            else:
+                pag.wait_for_selector("small.text-muted", timeout=10000)
+                datas = pag.locator("small.text-muted").all_inner_texts()
 
-        # cria as linhas da tabela que tem descrito o tipo de perfil e a data que foi criada 
-            rows = pag.locator("table tbody tr:has(small.text-muted)")
-            total = rows.count()
+            # cria as linhas da tabela que tem descrito o tipo de perfil e a data que foi criada 
+                rows = pag.locator("table tbody tr:has(small.text-muted)")
+                total = rows.count()
 
-        # define uma data limite para a condição de excluir os crachas
-            limit_date = date(2025, 4, 6)
+            # define uma data limite para a condição de excluir os crachas
+                limit_date = date(2025, 4, 6)
 
-        # percorre cada linha da tabela dos perfis e clica no "excluir" caso menor ou igual a data limite estipulada
-            for i in range(total):
-                row = rows.nth(i)
-                date_str = row.locator("small.text-muted").inner_html()
-                date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
+            # percorre cada linha da tabela dos perfis e clica no "excluir" caso menor ou igual a data limite estipulada
+                for i in range(total):
+                    row = rows.nth(i)
+                    date_str = row.locator("small.text-muted").inner_html()
+                    date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
 
-                if date_obj <= limit_date:
-                    row.locator(".btn-group").wait_for()
-                    row.locator(".btn-group").click()
-                    time.sleep(1.5)
-                    row.locator("a[href='javascript:void(0);']:has-text('Excluir')").wait_for()
-                    row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
-                else:
-                    continue
+                    if date_obj <= limit_date:
+                        row.locator(".btn-group").wait_for()
+                        row.locator(".btn-group").click()
+                        time.sleep(1.5)
+                        row.locator("a[href='javascript:void(0);']:has-text('Excluir')").wait_for()
+                        row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
+                    else:
+                        continue
         
         # espera um tempo para clicar em "Salvar" e passar para o proximo usuario
             time.sleep(2)
