@@ -31,11 +31,12 @@ with sync_playwright() as p:
             pag.locator("#ctl00_MainContent_cbNome_Input").wait_for()
             pag.locator("#ctl00_MainContent_cbNome_Input").click()
 
-        #espera 1 seg  dps preenche o campo com o CPF
+        #espera 2 seg  dps preenche o campo com o CPF
             time.sleep(2)
             pag.locator("#ctl00_MainContent_cbNome_Input").fill(cpf)
 
         # clica no CPF e da um scroll ate o final da pag 
+            time.sleep(2)
             pag.locator(".rcbList").click()
             pag.wait_for_load_state("networkidle")
             time.sleep(2)
@@ -61,13 +62,16 @@ with sync_playwright() as p:
                 if date_obj <= limit_date:
                     row.locator(".btn-group").wait_for()
                     row.locator(".btn-group").click()
-                    row.wait_for("a[href='javascript:void(0);']:has-text('Excluir')", timeout=10000)
+                    time.sleep(1.5)
+                    row.locator("a[href='javascript:void(0);']:has-text('Excluir')").wait_for()
                     row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
                 else:
                     continue
-
+        
+        # espera um tempo para clicar em "Salvar" e passar para o proximo usuario
             time.sleep(2)
-            pag.locator("a[href='javascript:void(0);']:has-text('Salvar')").click()
+            pag.locator("#cmdSalvar").wait_for()
+            pag.locator("#cmdSalvar").click()
                     
         input("enter pra sair")
         nav.close()
