@@ -19,13 +19,14 @@ def get_funcionario():
 
     return cpfs
 
+
 with sync_playwright() as p:
 
     # abrir navegador
         nav = p.firefox.launch(headless=False)
         pag = nav.new_page()
         pag.goto("https://www.ucsexplorer.com.br/login/login.aspx")
-        print("Abriu zé\n")
+        print("Navegador aberto!\n")
 
     # logar no UCS Explorer
         pag.locator("#ContentPlaceHolder1_txtemail").wait_for()
@@ -41,56 +42,73 @@ with sync_playwright() as p:
         pag.locator("a[title='Usuário']").wait_for()
         pag.locator("a[title='Usuário']").click()
 
+        user_not_exist = 0
+        empty_profiles = 0
+
         for cpf in get_funcionario():
 
         # seleciona a nav
             pag.locator("#ctl00_MainContent_cbNome_Input").wait_for()
             pag.locator("#ctl00_MainContent_cbNome_Input").click()
 
-        #espera 2 seg  dps preenche o campo com o CPF
-            time.sleep(2)
+        #espera 1 seg  dps preenche o campo com o CPF
+            time.sleep(1)
             pag.locator("#ctl00_MainContent_cbNome_Input").fill(cpf)
 
         # clica no CPF e da um scroll ate o final da pag 
-            time.sleep(2)
-            pag.locator(".rcbList").click()
-            pag.wait_for_load_state("networkidle")
-            time.sleep(2)
-            pag.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-        
-        # pega as datas de cadastro dos crachas nos perfis dos funcionarios
-            if pag.locator("small.text-muted").count() == 0:
-                 continue
+            time.sleep(1)
+            if pag.locator("div.rcbMoreResults span", has_text="Nada encontrado").count() > 0:
+                print("Usuario não encontrado no sistema!\n")
+                user_not_exist += 1
+                continue
             else:
-                pag.wait_for_selector("small.text-muted", timeout=10000)
-                datas = pag.locator("small.text-muted").all_inner_texts()
+                time.sleep(1)
+                pag.locator(".rcbList").click()
+                pag.wait_for_load_state("networkidle")
+                time.sleep(1)
+                pag.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            
+            # pega as datas de cadastro dos crachas nos perfis dos funcionarios
+                if pag.locator("small.text-muted").count() == 0:
+                    print("não existe nenhum perfil de acesso cadastrado\n")
+                    empty_profiles += 1
+                    time.sleep(1)
+                    pag.locator("#cmdSalvar").wait_for()
+                    pag.locator("#cmdSalvar").click()
+                    continue
+                else:
+                    pag.wait_for_selector("small.text-muted", timeout=10000)
+                    datas = pag.locator("small.text-muted").all_inner_texts()
 
-            # cria as linhas da tabela que tem descrito o tipo de perfil e a data que foi criada 
-                rows = pag.locator("table tbody tr:has(small.text-muted)")
-                total = rows.count()
+                # cria as linhas da tabela que tem descrito o tipo de perfil e a data que foi criada 
+                    rows = pag.locator("table tbody tr:has(small.text-muted)")
+                    total = rows.count()
 
-            # define uma data limite para a condição de excluir os crachas
-                limit_date = date(2025, 4, 6)
+                # define uma data limite para a condição de excluir os crachas
+                    limit_date = date(2025, 4, 6)
 
-            # percorre cada linha da tabela dos perfis e clica no "excluir" caso menor ou igual a data limite estipulada
-                for i in range(total):
-                    row = rows.nth(i)
-                    date_str = row.locator("small.text-muted").inner_html()
-                    date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
+                # percorre cada linha da tabela dos perfis e clica no "excluir" caso menor ou igual a data limite estipulada
+                    for i in range(total):
+                        row = rows.nth(i)
+                        date_str = row.locator("small.text-muted").inner_html()
+                        date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
 
-                    if date_obj <= limit_date:
-                        row.locator(".btn-group").wait_for()
-                        row.locator(".btn-group").click()
-                        time.sleep(1.5)
-                        row.locator("a[href='javascript:void(0);']:has-text('Excluir')").wait_for()
-                        row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
-                    else:
-                        continue
+                        if date_obj <= limit_date:
+                            row.locator(".btn-group").wait_for()
+                            row.locator(".btn-group").click()
+                            time.sleep(1)
+                            row.locator("a[href='javascript:void(0);']:has-text('Excluir')").wait_for()
+                            row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
+                        else:
+                            continue
         
         # espera um tempo para clicar em "Salvar" e passar para o proximo usuario
-            time.sleep(2)
+            time.sleep(1)
             pag.locator("#cmdSalvar").wait_for()
             pag.locator("#cmdSalvar").click()
                     
-        input("enter pra sair")
+        print(f"{user_not_exist} funcionaios não existentes no sistema")
+        print(f"Foram encontrados {empty_profiles} perfis sem acessos cadastrados anteiormente!")
+        time.sleep(2)
+        print("Até logo!")
         nav.close()
