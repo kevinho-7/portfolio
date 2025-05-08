@@ -1,7 +1,23 @@
 from playwright.sync_api import sync_playwright
+import csv
+import os
 import time
 from datetime import datetime, date
-import funcs as f
+
+
+# função para ler os CPF's dos funcionarios
+def get_funcionario():
+    base_path = os.path.dirname(__file__)
+    csv_path = os.path.join(base_path, "funcionarios_santanna.csv")
+
+    cpfs = []
+    with open(csv_path, newline='', encoding="utf-8") as csv_file:
+        reader = csv.reader(csv_file)
+        next(reader)
+        for _, cpf in reader:
+            cpfs.append(cpf)
+
+    return cpfs
 
 with sync_playwright() as p:
 
@@ -16,7 +32,7 @@ with sync_playwright() as p:
         pag.locator("#ContentPlaceHolder1_txtemail").fill("suporte@santanna.g12.br")
 
         pag.locator("#ContentPlaceHolder1_txtsenha").wait_for()
-        pag.locator("#ContentPlaceHolder1_txtsenha").fill(f.get_senha())
+        pag.locator("#ContentPlaceHolder1_txtsenha").fill("!Suporte2025")
 
         pag.locator("#ContentPlaceHolder1_cmdLogin").wait_for()
         pag.locator("#ContentPlaceHolder1_cmdLogin").click()
@@ -25,7 +41,7 @@ with sync_playwright() as p:
         pag.locator("a[title='Usuário']").wait_for()
         pag.locator("a[title='Usuário']").click()
 
-        for cpf in f.get_funcionario():
+        for cpf in get_funcionario():
 
         # seleciona a nav
             pag.locator("#ctl00_MainContent_cbNome_Input").wait_for()
