@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import time
-from datetime import datetime
+from datetime import datetime, date
 import funcs as f
 
 with sync_playwright() as p:
@@ -45,24 +45,29 @@ with sync_playwright() as p:
             pag.wait_for_selector("small.text-muted", timeout=10000)
             datas = pag.locator("small.text-muted").all_inner_texts()
 
-        # exclui o cadastro do cracha do usuario 
-            # converted_dates = f.convert_string_to_dates(datas)
-            # limit_date = datetime.strptime("06/04/2025", "%d/%m/%Y").date()
-
+        # cria as linhas da tabela que tem descrito o tipo de perfil e a data que foi criada 
             rows = pag.locator("table tbody tr:has(small.text-muted)")
             total = rows.count()
 
+        # define uma data limite para a condição de excluir os crachas
+            limit_date = date(2025, 4, 6)
+
+        # percorre cada linha da tabela dos perfis e clica no "excluir" caso menor ou igual a data limite estipulada
             for i in range(total):
                 row = rows.nth(i)
-                date = [datetime.strptime(s, "%d/%m/%Y").date() for s in row.locator("small.text.muted").all_inner_texts()]
-                if date <= datetime.date(2025, 4, 6):
+                date_str = row.locator("small.text-muted").inner_html()
+                date_obj = datetime.strptime(date_str, "%d/%m/%Y").date()
+
+                if date_obj <= limit_date:
                     row.locator(".btn-group").wait_for()
                     row.locator(".btn-group").click()
-                    break
+                    row.wait_for("a[href='javascript:void(0);']:has-text('Excluir')", timeout=10000)
+                    row.locator("a[href='javascript:void(0);']:has-text('Excluir')").click()
                 else:
-                    print("tudo certo cria")
-                    break
-            break
-            
+                    continue
+
+            time.sleep(2)
+            pag.locator("a[href='javascript:void(0);']:has-text('Salvar')").click()
+                    
         input("enter pra sair")
         nav.close()
