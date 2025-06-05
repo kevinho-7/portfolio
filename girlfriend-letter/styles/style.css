@@ -23,6 +23,64 @@ body {
   background-attachment: fixed;
 }
 
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a0a1f, #1b1b5f, #245b84, #9d4edd, #ff7f50);
+  background-size: 400% 400%;
+  animation: galaxyGradient 30s ease infinite;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.loader.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.loader-content p {
+  font-family: 'Marcellus', serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid white;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes galaxyGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .scroll-container {
   width: 100vw;
   height: 100vh;
@@ -45,6 +103,10 @@ body {
   padding: 1rem;
 }
 
+#btn1{
+  font-size: 2rem;
+}
+
 .sips,
 .heart {
   font-size: clamp(5rem, 8vw, 20rem);
@@ -56,8 +118,8 @@ body {
 }
 
 .carousel-container {
-  width: 100%;
-  max-width: 600px;
+  width: 90vw;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -65,7 +127,7 @@ body {
 .carousel-item img {
   width: 100%;
   height: auto;
-  max-height: 80vh;
+  max-height: 75vh;
   object-fit: contain;
   border-radius: 0.5rem;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
@@ -90,3 +152,22 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+@media (min-width: 2560px) {
+  .carousel-container {
+    max-width: 1100px;
+    transform: scale(1.5);
+    transform-origin: center;
+  }
+
+  .caption-text {
+    font-size: 3rem;
+  }
+
+  .carousel-item img {
+    max-height: 90vh;
+  }
+}
+
+
+
