@@ -60,13 +60,6 @@ p.card-text{
 
 @media (max-width: 768px) {
   body {
-    font-family: var(--principal-font);
-    background-image: url("../images/galaxy2.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     background-attachment: fixed;
-    overflow: hidden;
-    height: 100vh;
   }
 }
