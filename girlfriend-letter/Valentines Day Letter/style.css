@@ -100,7 +100,7 @@ body {
 }
 
 .card-body p {
-    font-size: 10px;
+    font-size: 0.85rem;
     font-weight: 300;
 }
 .card-body p+p {
