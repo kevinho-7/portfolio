@@ -9,6 +9,13 @@
   box-sizing: border-box;
 }
 
+html,body{
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
 body {
   font-family: var(--principal-font);
   background-image: url("../images/galaxy2.png");
@@ -16,16 +23,22 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  overflow: hidden;
-  height: 100vh;
 }
 
-.page {
-  height: 100vh;
+.scroll-container {
   width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.slides {
+  height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   scroll-snap-align: start;
 }
 
@@ -34,7 +47,7 @@ body {
 }
 
 .sips {
-  font-size: 7rem;
+  font-size: 3.5rem;
 }
 
 .heart {
@@ -58,8 +71,14 @@ p.card-text{
   font-family: var(--secundary-font);
 }
 
-@media (max-width: 768px) {
-  body {
-    background-attachment: fixed;
-  }
+.fade-up-on-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease;
 }
+
+.fade-up-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
