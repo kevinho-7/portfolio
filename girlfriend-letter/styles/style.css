@@ -181,6 +181,14 @@ img.img-fluid.rounded-start{
   transform: translateY(0);
 }
 
+.special-for-me{
+  font-size: clamp(3rem, 4vw ,10rem);
+}
+
+.special-for-me2{
+  font-size: clamp(4rem, 4vw ,10rem);
+}
+
 #slide4  img.img-fluid.rounded-start,
 #slides5 img.img-fluid.rounded-start,
 #slide6  img.img-fluid.rounded-start{
