@@ -149,18 +149,16 @@ body {
 
 .heading-qualidades{
   font-family: var(--principal-font);
-  font-size: clamp(1.4rem, 6vw, 2.5rem);
+  font-size: clamp(2.5rem, 6vw, 2.5rem);
   line-height: 1.15;
   overflow-wrap: break-word;
-  /* text-align: left; */
 }
 
 .text-qualidades{
   font-family: var(--secundary-font);
-  font-size: clamp(1rem, 4vw, 1.3rem);
+  font-size: clamp(1.2rem, 4vw, 1.3rem);
   line-height: 1.5;
   overflow-wrap: break-word;
-  /* text-align: left; */
 }
 
 img.img-fluid.rounded-start{
